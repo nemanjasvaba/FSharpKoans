@@ -54,9 +54,35 @@ module ``about the stock example`` =
     // Feel free to add extra [<Koan>] members here to write
     // tests for yourself along the way. You can also try 
     // using the F# Interactive window to check your progress.
+    let strToDouble x =
+        System.Double.Parse(x)
+
+    let absDelta (x, y) = 
+        abs((strToDouble x) - (strToDouble y))
+
+    let splitCommas (x:string) =
+        let interim = x.Split([|','|])
+        //x.Split([|','|])
+        (interim.[0], absDelta(interim.[1], interim.[4]))
+
+    let trimmedStock = stockData.Tail
+    
+    let iterresult = 
+        seq {for x in trimmedStock do 
+                yield splitCommas x }
+        |> Seq.sortBy snd
+        |> Seq.toList
+        |> List.rev
+
+    let myresult, _ = iterresult.[0]
+    
+    printf "result: %s" myresult      
+            
+
+
 
     [<Koan>]
     let YouGotTheAnswerCorrect() =
-        let result =  __
+        let result = myresult
         
         AssertEquality "2012-03-13" result
